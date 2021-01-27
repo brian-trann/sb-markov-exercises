@@ -25,14 +25,14 @@ class MarkovMachine {
 			if (!this.chains[word]) {
 				this.chains[word] = [ nextWord ];
 			} else {
-				this.chains[word] = [ ...this.chains, nextWord ];
+				this.chains[word] = [ ...this.chains[word], nextWord ];
 			}
 		});
 		return this.chains;
 	}
 
 	/** return random text from chains
-   * 
+   * find all words that can come after that word
    * pick one of those next-words randomly
    * if we picked null, we’ve reached the end of the chain, so stop
    * otherwise, restart at step 1
@@ -41,20 +41,21 @@ class MarkovMachine {
 	makeText(numWords = 100) {
 		const text = [];
 		const words = Object.keys(this.chains);
+		if (words.length > 0) {
+			// generate random index value, to choose random word
+			const randIdx = Math.floor(Math.random() * words.length);
+			let currWord = words[randIdx];
+			text.push(currWord);
 
-		// generate random index value, to choose random word
-		const randIdx = Math.floor(Math.random() * words.length);
-		let currWord = words[randIdx];
-		text.push(currWord);
-
-		while (text.length < numWords) {
-			const newIdx = Math.floor(Math.random() * this.chains[currWord].length);
-			const nextWord = this.chains[currWord][newIdx];
-			if (nextWord) {
-				text.push(nextWord);
-				currWord = nextWord;
-			} else {
-				break;
+			while (text.length < numWords) {
+				const newIdx = Math.floor(Math.random() * this.chains[currWord].length);
+				const nextWord = this.chains[currWord][newIdx];
+				if (nextWord) {
+					text.push(nextWord);
+					currWord = nextWord;
+				} else {
+					break;
+				}
 			}
 		}
 		return text.join(' ');
