@@ -39,6 +39,6 @@ if (method === 'file') {
 } else if (method === 'url') {
 	makeMarkovFromWeb(path);
 } else {
-	console.error();
+	console.error(`Please provide a valid method: 'file' or 'url' \n You provided: ${method}`);
 	process.exit(1);
 }
